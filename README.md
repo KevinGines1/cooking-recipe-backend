@@ -157,7 +157,7 @@ TODO
 > used for multiple recipes* 
 
 ### Future implementations
-1. Add `tags` for recipes making it easier for user's to find and filter recipes
+1. Add `tags` for recipes making it easier for users to find and filter recipes
     - Examples: User's can a tag a recipe as: `#protein`, `#calorie_deficit`, `#carbo_loading`
 
 
