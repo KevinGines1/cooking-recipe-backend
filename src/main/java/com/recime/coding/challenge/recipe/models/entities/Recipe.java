@@ -1,5 +1,6 @@
 package com.recime.coding.challenge.recipe.models.entities;
 
+import com.recime.coding.challenge.recipe.models.dto.DietTypeDto;
 import com.recime.coding.challenge.recipe.models.dto.RecipeDto;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -17,6 +18,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -66,6 +68,12 @@ public class Recipe {
                 .map(Ingredient::fromDto)
                 .collect(Collectors.toList());
 
+        List<DietTypeDto> dietTypeDtos = Optional.ofNullable(dto.getDietTypes()).orElse(List.of());
+
+        List<DietType> dietType = dietTypeDtos.stream()
+                .map(DietType::fromDto)
+                .collect(Collectors.toList());
+
         return Recipe.builder()
                 .id(dto.getId())
                 .title(dto.getTitle())
@@ -73,6 +81,7 @@ public class Recipe {
                 .servings(dto.getServings())
                 .instructions(dto.getInstructions())
                 .ingredients(ingredients)
+                .dietTypes(dietType)
                 .build();
     }
 }

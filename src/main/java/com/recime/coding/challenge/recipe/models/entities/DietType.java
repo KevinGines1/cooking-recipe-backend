@@ -38,6 +38,8 @@ public class DietType {
                 .id(dto.getId())
                 .name(dto.getName())
                 .description(dto.getDescription())
+                .createdDate(dto.getCreatedDate())
+                .updatedDate(dto.getUpdatedDate())
                 .build();
     }
 }

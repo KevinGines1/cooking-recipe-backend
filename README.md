@@ -26,24 +26,34 @@ that provides the creation, retrieval, search, deletion, and update of a cooking
 
 **Request Body**
 
-| field        | type   | description                                  | required? (Yes/Optional/Conditionally Required) |
-|--------------|--------|----------------------------------------------|-------------------------------------------------|
-| title        | string | title of recipe                              | Yes                                             |
-| servings     | number | number of servings                           | Yes                                             |
-| description  | string | description of the recipe                    | Yes                                             |
-| diet_type    | string | diet type of the recipe                      | Optional                                        |
-| instructions | string | instructions of recipe (in RichText format*) | Yes                                             |
+| field        | type      | description                                                | required? (Yes/Optional/Conditionally Required) |
+|--------------|-----------|------------------------------------------------------------|-------------------------------------------------|
+| title        | string    | title of recipe                                            | Yes                                             |
+| servings     | number    | number of servings                                         | Yes                                             |
+| description  | string    | description of the recipe                                  | Optional                                        |
+| ingredients  | string [] | ingredients in this recipe. Must follow Ingredient schema  | Yes                                             |
+| diet_type    | string [] | diet types of the recipe. Must follow the Diet Type schema | Optional                                        |
+| instructions | string    | instructions of recipe (in RichText format*)               | Yes                                             |
 
 **Sample Request**
 
 `POST /recipe`
 ```json
 {
-  "title": "Pork Adobo",
-  "servings": 4,
-  "description": "Filipino Staple Food",
-  "diet_type": "",
-  "instructions": "1. Mix all ingredients together\\n2. Cook until meat is brown\\n3. Add water, cook for 45 minutes\\n4. Serve"
+   "title": "Pork Adobo",
+   "servings": 4,
+   "dietTypes": [
+      {
+         "name": "VEGETARIAN"
+      }
+   ],
+   "description": "Filipino Staple Food",
+   "instructions": "1. Mix all ingredients together\\n2. Cook until meat is brown\\n3. Add water, cook for 45 minutes\\n4. Serve",
+   "ingredients": [
+      {
+         "name": "Pork"
+      }
+   ]
 }
 ```
 
@@ -52,7 +62,31 @@ that provides the creation, retrieval, search, deletion, and update of a cooking
 `201 CREATED`
 
 ```json
-TODO
+{
+   "id": "6e753255-0ee9-4147-a531-ea99049d6358",
+   "title": "Pork Adobo",
+   "description": "Filipino Staple Food",
+   "servings": 4,
+   "instructions": "1. Mix all ingredients together\\n2. Cook until meat is brown\\n3. Add water, cook for 45 minutes\\n4. Serve",
+   "ingredients": [
+      {
+         "id": "a2e3a1b5-9a52-449c-a003-cf4b95968cbc",
+         "name": "Pork",
+         "description": null,
+         "createdDate": null,
+         "updatedDate": null
+      }
+   ],
+   "dietTypes": [
+      {
+         "id": "0f714133-0b1d-4be6-b354-cf0ce3ace0b0",
+         "name": "VEGETARIAN",
+         "description": null,
+         "createdDate": "2026-03-07T22:08:59.668351Z",
+         "updatedDate": null
+      }
+   ]
+}
 ```
 ---
 ### Find Recipe
@@ -66,14 +100,38 @@ TODO
 
 **Sample Request**
 
-`GET /recipe/2c24bcc0-ac04-4b97-b157-7acaebb6153d`
+`GET /recipe/6e753255-0ee9-4147-a531-ea99049d6358`
 
 **Sample Response**
 
 `200 OK`
 
 ```json
-TODO
+{
+   "id": "6e753255-0ee9-4147-a531-ea99049d6358",
+   "title": "Pork Adobo",
+   "description": "Filipino Staple Food",
+   "servings": 4,
+   "instructions": "1. Mix all ingredients together\\n2. Cook until meat is brown\\n3. Add water, cook for 45 minutes\\n4. Serve",
+   "ingredients": [
+      {
+         "id": "a2e3a1b5-9a52-449c-a003-cf4b95968cbc",
+         "name": "Pork",
+         "description": null,
+         "createdDate": "2026-03-07T21:25:43.305307Z",
+         "updatedDate": null
+      }
+   ],
+   "dietTypes": [
+      {
+         "id": "0f714133-0b1d-4be6-b354-cf0ce3ace0b0",
+         "name": "VEGETARIAN",
+         "description": null,
+         "createdDate": "2026-03-07T22:08:59.668351Z",
+         "updatedDate": null
+      }
+   ]
+}
 ```
 ---
 ### Update Recipe
@@ -87,22 +145,22 @@ TODO
 
 **Request Body**
 
-| field        | type   | description                                  | required? (Yes/Optional/Conditionally Required) |
-|--------------|--------|----------------------------------------------|-------------------------------------------------|
-| title        | string | title of recipe                              | Optional                                        |
-| servings     | number | number of servings                           | Optional                                        |
-| description  | string | description of the recipe                    | Optional                                        |
-| diet_type    | string | diet type of the recipe                      | Optional                                        |
-| instructions | string | instructions of recipe (in RichText format*) | Optional                                        |
+| field        | type      | description                                                | required? (Yes/Optional/Conditionally Required) |
+|--------------|-----------|------------------------------------------------------------|-------------------------------------------------|
+| title        | string    | title of recipe                                            | Optional                                        |
+| servings     | number    | number of servings                                         | Optional                                        |
+| description  | string    | description of the recipe                                  | Optional                                        |
+| ingredients  | string [] | ingredients in this recipe. Must follow Ingredient schema  | Optional                                        |
+| diet_type    | string [] | diet types of the recipe. Must follow the Diet Type schema | Optional                                        |
+| instructions | string    | instructions of recipe (in RichText format*)               | Optional                                        |
 
 **Sample Request**
 
-`PATCH /recipe/2c24bcc0-ac04-4b97-b157-7acaebb6153d`
+`PATCH /recipe/6e753255-0ee9-4147-a531-ea99049d6358`
 > API supports updating of a specific field only
 ```json
 {
-  "title": "Adobong Baboy",
-  "diet_type": "LOW_CARB"
+   "title": "Pig Adobo"
 }
 ```
 
@@ -111,7 +169,31 @@ TODO
 `200 OK`
 
 ```json
-TODO
+{
+   "id": "6e753255-0ee9-4147-a531-ea99049d6358",
+   "title": "Pig Adobo",
+   "description": "Filipino Staple Food",
+   "servings": 4,
+   "instructions": "1. Mix all ingredients together\\n2. Cook until meat is brown\\n3. Add water, cook for 45 minutes\\n4. Serve",
+   "ingredients": [
+      {
+         "id": "a2e3a1b5-9a52-449c-a003-cf4b95968cbc",
+         "name": "Pork",
+         "description": null,
+         "createdDate": "2026-03-07T21:25:43.305307Z",
+         "updatedDate": null
+      }
+   ],
+   "dietTypes": [
+      {
+         "id": "0f714133-0b1d-4be6-b354-cf0ce3ace0b0",
+         "name": "VEGETARIAN",
+         "description": null,
+         "createdDate": "2026-03-07T22:08:59.668351Z",
+         "updatedDate": null
+      }
+   ]
+}
 ```
 ---
 ### Delete Recipe
@@ -125,15 +207,12 @@ TODO
 
 **Sample Request**
 
-`DELETE /recipe/2c24bcc0-ac04-4b97-b157-7acaebb6153d`
+`DELETE /recipe/6e753255-0ee9-4147-a531-ea99049d6358`
 
 **Sample Response**
 
 `200 OK`
 
-```json
-TODO
-```
 ---
 ### Search Recipe
 
