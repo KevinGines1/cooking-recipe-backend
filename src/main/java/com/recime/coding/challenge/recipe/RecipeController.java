@@ -2,6 +2,7 @@ package com.recime.coding.challenge.recipe;
 
 import com.recime.coding.challenge.recipe.models.dto.RecipeDto;
 import com.recime.coding.challenge.recipe.services.RecipeService;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.UUID;
 
@@ -24,8 +27,11 @@ import java.util.UUID;
 public class RecipeController {
     public static final String X_REQUEST_ID = "x-request-id";
 
+    private static final Logger LOG = LoggerFactory.getLogger(RecipeController.class);
+
+
     private final RecipeService recipeService;
-    public RecipeController(@Qualifier("recipeDataService") RecipeService recipeService) {
+    public RecipeController(@Qualifier("recipeService") RecipeService recipeService) {
         this.recipeService = recipeService;
     }
 
@@ -35,6 +41,8 @@ public class RecipeController {
             @RequestHeader(value=X_REQUEST_ID, required=true) String xRequestId,
             @Valid @RequestBody RecipeDto newRecipe
     ) {
+        MDC.put(X_REQUEST_ID, xRequestId);
+        LOG.info("[x-request-id={}] method=createRecipe", xRequestId);
         return recipeService.createRecipe(newRecipe);
     }
 
@@ -43,6 +51,8 @@ public class RecipeController {
             @RequestHeader(value=X_REQUEST_ID, required=true) String xRequestId,
             @PathVariable("recipeId") UUID recipeId
     ) {
+        MDC.put(X_REQUEST_ID, xRequestId);
+        LOG.info("[x-request-id={}] method=findRecipe, recipe-id={}", xRequestId, recipeId);
         return recipeService.findRecipeById(recipeId);
     }
 
@@ -52,6 +62,8 @@ public class RecipeController {
             @PathVariable("recipeId") UUID recipeId,
             @Valid @RequestBody RecipeDto updatedRecipe
     ) {
+        MDC.put(X_REQUEST_ID, xRequestId);
+        LOG.info("[x-request-id={}] method=updateRecipe, recipe-id={}", xRequestId, recipeId);
         return recipeService.updateRecipe(recipeId, updatedRecipe);
     }
 
@@ -61,6 +73,8 @@ public class RecipeController {
             @RequestHeader(value=X_REQUEST_ID, required=true) String xRequestId,
             @PathVariable("recipeId") UUID recipeId
     ) {
+        MDC.put(X_REQUEST_ID, xRequestId);
+        LOG.info("[x-request-id={}] method=deleteRecipe, recipe-id={}", xRequestId, recipeId);
         recipeService.deleteRecipe(recipeId);
     }
 
@@ -68,6 +82,8 @@ public class RecipeController {
     public ResponseEntity<Object> searchRecipe(
             @RequestHeader(value=X_REQUEST_ID, required=true) String xRequestId
     ) {
+        MDC.put(X_REQUEST_ID, xRequestId);
+        LOG.info("[x-request-id={}] method=searchRecipe, recipe-id={}", xRequestId);
         return null;
     }
 

@@ -1,5 +1,6 @@
 package com.recime.coding.challenge.recipe.services;
 
+import com.recime.coding.challenge.recipe.exception.EntityNotFoundException;
 import com.recime.coding.challenge.recipe.models.dto.DietTypeDto;
 import com.recime.coding.challenge.recipe.models.dto.IngredientDto;
 import com.recime.coding.challenge.recipe.models.dto.RecipeDto;
@@ -9,6 +10,9 @@ import com.recime.coding.challenge.recipe.models.entities.Recipe;
 import com.recime.coding.challenge.recipe.repositories.DietTypeRepository;
 import com.recime.coding.challenge.recipe.repositories.IngredientRepository;
 import com.recime.coding.challenge.recipe.repositories.RecipeRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -17,8 +21,15 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import static com.recime.coding.challenge.recipe.RecipeController.X_REQUEST_ID;
+import static com.recime.coding.challenge.recipe.exception.EntityNotFoundException.DIET_TYPE_NOT_FOUND;
+import static com.recime.coding.challenge.recipe.exception.EntityNotFoundException.INGREDIENT_NOT_FOUND;
+import static com.recime.coding.challenge.recipe.exception.EntityNotFoundException.RECIPE_NOT_FOUND;
+
 @Service("recipeService")
 public class RecipeService {
+    private static final Logger LOG = LoggerFactory.getLogger(RecipeService.class);
+
     private final RecipeRepository recipeRepository;
     private final IngredientRepository ingredientRepository;
     private final DietTypeRepository dietTypeRepository;
@@ -30,6 +41,7 @@ public class RecipeService {
     }
 
     public RecipeDto createRecipe(RecipeDto recipe) {
+        LOG.info("[x-request-id={}] method=RecipeService.createRecipe", MDC.get(X_REQUEST_ID));
         saveNewIngredients(recipe);
         saveNewDietTypes(recipe);
 
@@ -41,22 +53,22 @@ public class RecipeService {
     }
 
     public RecipeDto findRecipeById(UUID recipeId) {
+        LOG.info("[x-request-id={}] method=RecipeService.findRecipeById, id={}", MDC.get(X_REQUEST_ID), recipeId);
         Optional<Recipe> recipe = recipeRepository.findById(recipeId);
 
         if (recipe.isEmpty()) {
-            // TODO: Recipe not found 404
-            throw new RuntimeException();
+            throw new EntityNotFoundException(RECIPE_NOT_FOUND);
         }
 
         return RecipeDto.toDto(recipe.get());
     }
 
     public RecipeDto updateRecipe(UUID recipeId, RecipeDto recipeDto) {
+        LOG.info("[x-request-id={}] method=RecipeService.updateRecipe, id={}", MDC.get(X_REQUEST_ID), recipeId);
         Optional<Recipe> recipe = recipeRepository.findById(recipeId);
 
         if (recipe.isEmpty()) {
-            // TODO: Recipe not found 404
-            throw new RuntimeException();
+            throw new EntityNotFoundException(RECIPE_NOT_FOUND);
         }
 
         Recipe updatedRecipe = recipeRepository.save(setUpdatedFields(recipeDto, recipe.get()));
@@ -64,11 +76,11 @@ public class RecipeService {
     }
 
     public void deleteRecipe(UUID recipeId) {
+        LOG.info("[x-request-id={}] method=RecipeService.deleteRecipe, id={}", MDC.get(X_REQUEST_ID), recipeId);
         Optional<Recipe> recipe = recipeRepository.findById(recipeId);
 
         if (recipe.isEmpty()) {
-            // TODO: Recipe not found 404
-            throw new RuntimeException();
+            throw new EntityNotFoundException(RECIPE_NOT_FOUND);
         }
 
         recipeRepository.deleteById(recipeId);
@@ -149,7 +161,7 @@ public class RecipeService {
             Ingredient ingredient;
             if (ingDTO.getId() != null) {
                 ingredient = ingredientRepository.findById(ingDTO.getId())
-                        .orElseThrow(() -> new RuntimeException("Ingredient not found"));
+                        .orElseThrow(() -> new EntityNotFoundException(INGREDIENT_NOT_FOUND));
                 if (ingDTO.getName() != null) ingredient.setName(ingDTO.getName());
                 if (ingDTO.getDescription() != null) ingredient.setDescription(ingDTO.getDescription());
                 ingredient.setUpdatedDate(Instant.now());
@@ -174,7 +186,7 @@ public class RecipeService {
             DietType dietType;
             if (dto.getId() != null) {
                 dietType = dietTypeRepository.findById(dto.getId())
-                        .orElseThrow(() -> new RuntimeException("Diet type not found"));
+                        .orElseThrow(() -> new EntityNotFoundException(DIET_TYPE_NOT_FOUND));
                 if (dto.getName() != null) dietType.setName(dto.getName());
                 if (dto.getDescription() != null) dietType.setDescription(dto.getDescription());
                 dietType.setUpdatedDate(Instant.now());
