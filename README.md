@@ -29,7 +29,7 @@ that provides the creation, retrieval, search, deletion, and update of a cooking
 | field        | type   | description                                  | required? (Yes/Optional/Conditionally Required) |
 |--------------|--------|----------------------------------------------|-------------------------------------------------|
 | title        | string | title of recipe                              | Yes                                             |
-| servings     | string | number of servings                           | Yes                                             |
+| servings     | number | number of servings                           | Yes                                             |
 | description  | string | description of the recipe                    | Yes                                             |
 | diet_type    | string | diet type of the recipe                      | Optional                                        |
 | instructions | string | instructions of recipe (in RichText format*) | Yes                                             |
@@ -40,7 +40,7 @@ that provides the creation, retrieval, search, deletion, and update of a cooking
 ```json
 {
   "title": "Pork Adobo",
-  "servings": "3-4",
+  "servings": 4,
   "description": "Filipino Staple Food",
   "diet_type": "",
   "instructions": "1. Mix all ingredients together\\n2. Cook until meat is brown\\n3. Add water, cook for 45 minutes\\n4. Serve"
@@ -90,10 +90,10 @@ TODO
 | field        | type   | description                                  | required? (Yes/Optional/Conditionally Required) |
 |--------------|--------|----------------------------------------------|-------------------------------------------------|
 | title        | string | title of recipe                              | Optional                                        |
-| servings     | string | number of servings                           | Optional                                        |
-| description  | string | description of the recipe                    | Optional                                             |
+| servings     | number | number of servings                           | Optional                                        |
+| description  | string | description of the recipe                    | Optional                                        |
 | diet_type    | string | diet type of the recipe                      | Optional                                        |
-| instructions | string | instructions of recipe (in RichText format*) | Optional                                             |
+| instructions | string | instructions of recipe (in RichText format*) | Optional                                        |
 
 **Sample Request**
 
@@ -134,6 +134,42 @@ TODO
 ```json
 TODO
 ```
+---
+### Search Recipe
+
+**Request Body**
+
+| field       | type      | description                                 | required? (Yes/Optional/Conditionally Required) |
+|-------------|-----------|---------------------------------------------|-------------------------------------------------|
+| parameter   | string    | property to search/filter                   | Yes                                             |
+| operation   | string    | comparator ("EQUALS", "IN")                 | Yes                                             |
+| value       | string    | value to compare against                    | Yes                                             |
+| values      | string [] | values to compare against                   | Yes                                             |
+
+**Sample Request**
+
+`POST /recipe/search`
+
+```json
+{
+   "searchCriteria": [
+      {
+         "parameter": "text",
+         "operation": "EQUALS",
+         "values": "Adobo"
+      }
+   ]
+}
+```
+
+**Sample Response**
+
+`200 OK`
+
+```json
+TODO
+```
+---
 ---
 ## Database Specs
 ![./docs/diagrams/db_relationship_diagram.png](/docs/diagrams/db_relationship_diagram.png)

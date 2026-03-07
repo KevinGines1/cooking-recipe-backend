@@ -1,3 +1,27 @@
+logging:
+  level:
+    org:
+      springfarmework: DEBUG
+
 spring:
   application:
     name: coding.challenge
+  jpa:
+    show-sql: true
+    database-platform: "org.hibernate.dialect.PostgreSQLDialect"
+    defer-datasource-initialization: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: "org.hibernate.dialect.PostgreSQLDialect"
+        format_sql: true
+  datasource:
+    url: "jdbc:postgresql://localhost:5432/recime"
+    username: "postgres"
+    password: "password"
+    driver-class-name: "org.postgresql.Driver"
+
+
+
+
