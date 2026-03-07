@@ -1,0 +1,87 @@
+Table recipes {
+
+id uuid [primary key]
+
+title varchar // length is max 50
+
+description varchar // length is max 280 (based it on X post length)
+
+servings integer
+
+created_at timestamp
+
+created_by timestamp
+
+updated_at timestamp
+
+updated_by timestamp
+
+category varchar // VEGETARIAN,
+
+instructions varchar // longer than title and description. 1000?
+
+}
+
+
+
+Table ingredients {
+
+id uuid [primary key]
+
+name varchar
+
+description varchar
+
+recipeId uuid
+
+}
+
+
+
+Table diet_types {
+
+id uuid
+
+name varchar
+
+description varchar
+
+created_at timestamp // we can flag a category as NEW ✨ when we add it
+
+}
+
+
+
+Table recipe_ingredients {
+
+recipe_id uuid
+
+ingredient_id uuid
+
+created_at timestamp
+
+}
+
+
+
+Table recipe_diet_types {
+
+recipe_id uuid
+
+diet_type_id uuid
+
+created_at timestamp
+
+}
+
+
+
+Ref recipe_ingredients_recipe_key: recipes.id - recipe_ingredients.recipe_id
+
+Ref recipe_ingredients_ingredients_key: ingredients.id - recipe_ingredients.ingredient_id
+
+
+
+Ref recipe_diet_type_recipe_key: recipes.id - recipe_diet_types.recipe_id
+
+Ref recipe_diet_type_diet_type_key: diet_types.id - recipe_diet_types.diet_type_id
