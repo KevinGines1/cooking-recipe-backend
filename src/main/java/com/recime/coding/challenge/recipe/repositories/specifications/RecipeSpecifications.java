@@ -4,9 +4,7 @@ import com.recime.coding.challenge.recipe.models.dto.SearchCriteriaDto;
 import com.recime.coding.challenge.recipe.models.entities.DietType;
 import com.recime.coding.challenge.recipe.models.entities.Ingredient;
 import com.recime.coding.challenge.recipe.models.entities.Recipe;
-import jakarta.persistence.criteria.Expression;
 import jakarta.persistence.criteria.Join;
-import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.util.List;
