@@ -1,11 +1,11 @@
 package com.recime.coding.challenge.recipe;
 
 import com.recime.coding.challenge.recipe.models.dto.RecipeDto;
+import com.recime.coding.challenge.recipe.models.dto.SearchCriteriaRequestDto;
 import com.recime.coding.challenge.recipe.services.RecipeService;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -20,6 +20,7 @@ import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController("recipeController")
@@ -79,12 +80,13 @@ public class RecipeController {
     }
 
     @PostMapping("/search")
-    public ResponseEntity<Object> searchRecipe(
-            @RequestHeader(value=X_REQUEST_ID, required=true) String xRequestId
+    public List<RecipeDto> searchRecipe(
+            @RequestHeader(value=X_REQUEST_ID, required=true) String xRequestId,
+            @Valid @RequestBody SearchCriteriaRequestDto searchCriteriaRequestDto
     ) {
         MDC.put(X_REQUEST_ID, xRequestId);
         LOG.info("[x-request-id={}] method=searchRecipe, recipe-id={}", xRequestId);
-        return null;
+        return recipeService.searchRecipes(searchCriteriaRequestDto);
     }
 
 }

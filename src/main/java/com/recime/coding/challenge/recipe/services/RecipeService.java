@@ -4,21 +4,26 @@ import com.recime.coding.challenge.recipe.exception.EntityNotFoundException;
 import com.recime.coding.challenge.recipe.models.dto.DietTypeDto;
 import com.recime.coding.challenge.recipe.models.dto.IngredientDto;
 import com.recime.coding.challenge.recipe.models.dto.RecipeDto;
+import com.recime.coding.challenge.recipe.models.dto.SearchCriteriaRequestDto;
 import com.recime.coding.challenge.recipe.models.entities.DietType;
 import com.recime.coding.challenge.recipe.models.entities.Ingredient;
 import com.recime.coding.challenge.recipe.models.entities.Recipe;
 import com.recime.coding.challenge.recipe.repositories.DietTypeRepository;
 import com.recime.coding.challenge.recipe.repositories.IngredientRepository;
 import com.recime.coding.challenge.recipe.repositories.RecipeRepository;
+import com.recime.coding.challenge.recipe.repositories.specifications.RecipeSpecifications;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 import static com.recime.coding.challenge.recipe.RecipeController.X_REQUEST_ID;
@@ -84,6 +89,15 @@ public class RecipeService {
         }
 
         recipeRepository.deleteById(recipeId);
+    }
+
+    public List<RecipeDto> searchRecipes(SearchCriteriaRequestDto dto) {
+        LOG.info("[x-request-id={}] method=RecipeService.searchRecipes", MDC.get(X_REQUEST_ID));
+
+        Specification<Recipe> recipeSpecification = RecipeSpecifications.buildFrom(dto.getSearchCriteria());
+
+        List<Recipe> recipes = recipeRepository.findAll(recipeSpecification);
+        return recipes.stream().map(RecipeDto::toDto).toList();
     }
 
     private void saveNewIngredients(RecipeDto recipe) {
