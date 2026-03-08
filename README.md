@@ -1,7 +1,6 @@
 # ReciMe Coding Challenge (RCC)
-# Recipe Cook Collection 
 
-ReciMe Coding Challenge aka `Recipe Cook Collection` (RCC) service is a RESTful Backend
+ReciMe Coding Challenge aka `Recipe Core Console` (RCC) is a RESTful Backend
 that provides the creation, retrieval, search, deletion, and update of a cooking recipe.
 
 - [Service Technical Specifications](#service-technical-specs)
