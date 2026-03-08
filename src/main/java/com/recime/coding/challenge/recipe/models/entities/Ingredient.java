@@ -44,6 +44,7 @@ public class Ingredient {
                 .id(dto.getId())
                 .name(dto.getName())
                 .description(dto.getDescription())
+                .createdDate(dto.getCreatedDate())
                 .build();
     }
 }

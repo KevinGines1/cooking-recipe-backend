@@ -1,0 +1,173 @@
+{
+  "info": {
+    "_postman_id": "0cd347b0-cba8-45c8-9cbc-e3880453306c",
+    "name": "ReciMe Coding Challenge",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "42689402"
+  },
+  "item": [
+    {
+      "name": "Create Recipe",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "x-request-id",
+            "value": "{{$guid}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"title\": \"Pancit Canton\",\n    \"servings\": 2,\n    \"description\": \"Filipino Staple Snack\",\n    \"instructions\": \"1. Boil waiter\\\\n2. Add Pancit Canton\\\\n3. Drain 95% water and add seasonings\\\\n4. Enjoy!\",\n    \"ingredients\": [\n        {\n            \"name\": \"Pancit Canton Pack (2x)\"\n        }\n    ]\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "localhost:8080/recipe",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "recipe"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Search Recipe",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "x-request-id",
+            "value": "{{$guid}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"searchCriteria\": []\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "localhost:8080/recipe/search",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "recipe",
+            "search"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Recipe",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "x-request-id",
+            "value": "{{$guid}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Pork Adobo\",\n  \"servings\": 4,\n  \"description\": \"Filipino Staple Food\",\n//   \"diet_type\": \"\",\n  \"instructions\": \"1. Mix all ingredients together\\\\n2. Cook until meat is brown\\\\n3. Add water, cook for 45 minutes\\\\n4. Serve\",\n  \"ingredients\": [\n    {\n        \"name\": \"Pork\"\n    }\n  ]\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "localhost:8080/recipe/c8b40933-b965-48df-87d8-bd6cdd8a92c9",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "recipe",
+            "c8b40933-b965-48df-87d8-bd6cdd8a92c9"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update Recipe",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "x-request-id",
+            "value": "{{$guid}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Pancit Canton - Chilimansi\",\n  \"dietTypes\": [{\n    \"name\": \"Cheat day\",\n    \"description\": \"Cheat days are allowed once after having at least 6 workouts in 2 weeks\"\n  }]\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "localhost:8080/recipe/c8b40933-b965-48df-87d8-bd6cdd8a92c9",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "recipe",
+            "c8b40933-b965-48df-87d8-bd6cdd8a92c9"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Recipe",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "x-request-id",
+            "value": "{{$guid}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "localhost:8080/recipe/384c9947-3c04-4de9-8903-52368d420484",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "recipe",
+            "384c9947-3c04-4de9-8903-52368d420484"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

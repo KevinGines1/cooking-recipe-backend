@@ -11,6 +11,6 @@ public class SearchCriteriaDto {
     public static final String PARAMETER_SERVINGS = "servings";
     public static final String PARAMETER_DIET_TYPE = "diet_type";
     private String parameter;
-    private String operation;
+    private String operation; // currently not in use
     private List<String> values;
 }

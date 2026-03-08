@@ -1,13 +1,12 @@
 logging:
   level:
     org:
-      springfarmework: DEBUG
+      springframework: INFO
 
 spring:
   application:
     name: coding.challenge
   jpa:
-    show-sql: true
     database-platform: "org.hibernate.dialect.PostgreSQLDialect"
     defer-datasource-initialization: true
     hibernate:

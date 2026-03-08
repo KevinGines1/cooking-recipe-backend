@@ -1,6 +1,7 @@
-# Challenge ReciMe Backend (CMB)
+# ReciMe Coding Challenge (RCC)
+# Recipe Cook Collection 
 
-Challenge ReciMe Backend or `Cooking Recipe Backend` (CMB) is a RESTful Backend service
+ReciMe Coding Challenge aka `Recipe Cook Collection` (RCC) service is a RESTful Backend
 that provides the creation, retrieval, search, deletion, and update of a cooking recipe.
 
 - [Service Technical Specifications](#service-technical-specs)
@@ -17,10 +18,12 @@ that provides the creation, retrieval, search, deletion, and update of a cooking
     - [Search Criteria Schema](#search-criteria-schema)
 - [Database Specifications](#database-specs)
 - [Future Implementations](#future-implementations)
+- [References](#references)
 
 ## Service Technical Specs
 - Java Spring Boot v3.5.11
 - Java 17
+- PostgreSQL 14.17
 
 ## Setup Guide
 1. Clone and open this repository on your IDE
@@ -30,17 +33,18 @@ that provides the creation, retrieval, search, deletion, and update of a cooking
 1. In IntelliJ, create a configuration file by clicking the `Current File` dropdown in the upper right corner then clicking `Edit Configurations...`
 2. Click `Add New...` > `Application`
 3. Name the configuration file (e.g. `AppConfig`), make sure that you're using `Java 17`
-4. Click the right button for the `Main class`, Select `Application.java` from the options. 
+4. Click the rightmost button on the `Main class` field and Select `Application.java` from the options. 
 5. Apply your changes 
 6. You may now click on `Run/Debug App Config` in the upper right corner just beside the configuration file that you created.
 
 ## API Specs
+> API Postman Collection can be found in: [./docs/ReciMe_Coding_Challenge.postman_collection.json](./docs/ReciMe_Coding_Challenge.postman_collection.json)
 ### Request Headers
-> ⚠ These request headers are required for all types of requests.
+> ⚠ These request headers are required for ALL types of requests. This will be helpful in tracing process flows in the service
 
-| field        | type | description                                                                                                               | required? (Yes/Optional/Conditionally Required) |
-|--------------|------|---------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------|
-| x-request-id | UUID | identifier for the request coming in to the service<br><br>*This will be helpful in tracing process flows in the service* | Yes                                             |
+| field        | type | description                                          | required? (Yes/Optional/Conditionally Required) |
+|--------------|------|------------------------------------------------------|-------------------------------------------------|
+| x-request-id | UUID | identifier for the request coming in to the service  | Yes                                             |
 ---
 ### Create Recipe
 
@@ -170,9 +174,9 @@ that provides the creation, retrieval, search, deletion, and update of a cooking
 | title        | string        | title of recipe                                            | Optional                                        |
 | servings     | number        | number of servings                                         | Optional                                        |
 | description  | string        | description of the recipe                                  | Optional                                        |
-| ingredients  | Ingredient [] | ingredients in this recipe. Must follow Ingredient schema  | Yes                                             |
+| ingredients  | Ingredient [] | ingredients in this recipe. Must follow Ingredient schema  | Optional                                        |
 | diet_type    | Diet Type []  | diet types of the recipe. Must follow the Diet Type schema | Optional                                        |
-| instructions | string        | instructions of recipe (in RichText format*)               | Optional                                        |
+| instructions | string        | instructions of recipe                                     | Optional                                        |
 
 **Sample Request**
 
@@ -248,6 +252,13 @@ that provides the creation, retrieval, search, deletion, and update of a cooking
 > - Use `ingredients` to filter based on ingredient name.
 > - Use `diet_types` to filter based on diet type name.
 
+> Passing an empty `searchCriteria` will fetch ALL recipes.
+> ```json
+> {
+>    "searchCriteria": []
+> }
+> ```
+
 
 
 **Sample Request**
@@ -318,7 +329,7 @@ that provides the creation, retrieval, search, deletion, and update of a cooking
 ---
 ## Database Specs
 ![./docs/diagrams/db_relationship_diagram.png](/docs/diagrams/db_relationship_diagram.png)
-*Source file*: `/docs/diagrams/db_relationship_diagram_src.txt`
+*Source file*: [/docs/diagrams/db_relationship_diagram_src.txt](./docs/diagrams/db_relationship_diagram_src.txt)
 
 ### Notes
 > `recipe_ingredients`
@@ -340,8 +351,20 @@ that provides the creation, retrieval, search, deletion, and update of a cooking
 ### Future implementations
 1. Add `tags` for recipes making it easier for users to find and filter recipes
     - Examples: User's can a tag a recipe as: `#protein`, `#calorie_deficit`, `#carbo_loading`
-2. Optimize the full-text search by adding *indices (or indexes)* to the search vector
-3. Optimize the conjunction tables b adding *indices (or indexes)* to the respective foreign keys
+2. Add `quantity` to ingredient conjunction table to represent quantity of that ingredient  for that particular recipe.
+3. Optimize the full-text search by adding *indices (or indexes)* to the search vector
+4. Optimize the conjunction tables b adding *indices (or indexes)* to the respective foreign keys
+5. Unit tests and integration tests
+6. `operation` field in Search feature is currently not used. Can be utilized for more flexible and powerful filtering (e.g. `GREATER_THAN`, `LESS_THAN`)
+7. Search pagination and limit number of results
+
+### References
+1. https://recime.notion.site/ReciMe-Backend-Developer-Coding-Challenge-848bbf4e5e1c4e89ae42e742eebd98d5
+2. https://www.datacamp.com/blog/many-to-many-relationship
+3. https://iniakunhuda.medium.com/postgresql-full-text-search-a-powerful-alternative-to-elasticsearch-for-small-to-medium-d9524e001fe0
+4. https://www.baeldung.com/jpa-many-to-many
+5. https://www.baeldung.com/intro-to-querydsl
+6. [Postman collection for testing](./docs/ReciMe_Coding_Challenge.postman_collection.json)
 
 
 
