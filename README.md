@@ -6,14 +6,34 @@ that provides the creation, retrieval, search, deletion, and update of a cooking
 - [Service Technical Specifications](#service-technical-specs)
 - [Setup Guide](#setup-guide)
 - [API Specifications](#api-specs)
+  - [Create Recipe](#create-recipe)
+  - [Find Recipe](#find-recipe)
+  - [Update Recipe](#update-recipe)
+  - [Delete Recipe](#delete-recipe)
+  - [Search Recipe](#search-recipe)
+  - [API Schema](#api-schema)
+    - [Ingredient Schema](#ingredient-schema)
+    - [Diet Type Schema](#diet-type-schema)
+    - [Search Criteria Schema](#search-criteria-schema)
 - [Database Specifications](#database-specs)
+- [Future Implementations](#future-implementations)
 
 ## Service Technical Specs
 - Java Spring Boot v3.5.11
 - Java 17
 
 ## Setup Guide
-> TODO
+1. Clone and open this repository on your IDE
+2. On your IDE's terminal, run `mvn clean install`
+
+#### IntelliJ
+1. In IntelliJ, create a configuration file by clicking the `Current File` dropdown in the upper right corner then clicking `Edit Configurations...`
+2. Click `Add New...` > `Application`
+3. Name the configuration file (e.g. `AppConfig`), make sure that you're using `Java 17`
+4. Click the right button for the `Main class`, Select `Application.java` from the options. 
+5. Apply your changes 
+6. You may now click on `Run/Debug App Config` in the upper right corner just beside the configuration file that you created.
+
 ## API Specs
 ### Request Headers
 > ⚠ These request headers are required for all types of requests.
@@ -26,14 +46,14 @@ that provides the creation, retrieval, search, deletion, and update of a cooking
 
 **Request Body**
 
-| field        | type      | description                                                | required? (Yes/Optional/Conditionally Required) |
-|--------------|-----------|------------------------------------------------------------|-------------------------------------------------|
-| title        | string    | title of recipe                                            | Yes                                             |
-| servings     | number    | number of servings                                         | Yes                                             |
-| description  | string    | description of the recipe                                  | Optional                                        |
-| ingredients  | string [] | ingredients in this recipe. Must follow Ingredient schema  | Yes                                             |
-| diet_type    | string [] | diet types of the recipe. Must follow the Diet Type schema | Optional                                        |
-| instructions | string    | instructions of recipe (in RichText format*)               | Yes                                             |
+| field        | type          | description                                                | required? (Yes/Optional/Conditionally Required) |
+|--------------|---------------|------------------------------------------------------------|-------------------------------------------------|
+| title        | string        | title of recipe                                            | Yes                                             |
+| servings     | number        | number of servings                                         | Yes                                             |
+| description  | string        | description of the recipe                                  | Optional                                        |
+| ingredients  | Ingredient [] | ingredients in this recipe. Must follow Ingredient schema  | Yes                                             |
+| diet_type    | Diet Type []  | diet types of the recipe. Must follow the Diet Type schema | Optional                                        |
+| instructions | string        | instructions of recipe (in RichText format*)               | Yes                                             |
 
 **Sample Request**
 
@@ -145,14 +165,14 @@ that provides the creation, retrieval, search, deletion, and update of a cooking
 
 **Request Body**
 
-| field        | type      | description                                                | required? (Yes/Optional/Conditionally Required) |
-|--------------|-----------|------------------------------------------------------------|-------------------------------------------------|
-| title        | string    | title of recipe                                            | Optional                                        |
-| servings     | number    | number of servings                                         | Optional                                        |
-| description  | string    | description of the recipe                                  | Optional                                        |
-| ingredients  | string [] | ingredients in this recipe. Must follow Ingredient schema  | Optional                                        |
-| diet_type    | string [] | diet types of the recipe. Must follow the Diet Type schema | Optional                                        |
-| instructions | string    | instructions of recipe (in RichText format*)               | Optional                                        |
+| field        | type          | description                                                | required? (Yes/Optional/Conditionally Required) |
+|--------------|---------------|------------------------------------------------------------|-------------------------------------------------|
+| title        | string        | title of recipe                                            | Optional                                        |
+| servings     | number        | number of servings                                         | Optional                                        |
+| description  | string        | description of the recipe                                  | Optional                                        |
+| ingredients  | Ingredient [] | ingredients in this recipe. Must follow Ingredient schema  | Yes                                             |
+| diet_type    | Diet Type []  | diet types of the recipe. Must follow the Diet Type schema | Optional                                        |
+| instructions | string        | instructions of recipe (in RichText format*)               | Optional                                        |
 
 **Sample Request**
 
@@ -215,15 +235,20 @@ that provides the creation, retrieval, search, deletion, and update of a cooking
 
 ---
 ### Search Recipe
-
 **Request Body**
 
-| field       | type      | description                                 | required? (Yes/Optional/Conditionally Required) |
-|-------------|-----------|---------------------------------------------|-------------------------------------------------|
-| parameter   | string    | property to search/filter                   | Yes                                             |
-| operation   | string    | comparator ("EQUALS", "IN")                 | Yes                                             |
-| value       | string    | value to compare against                    | Yes                                             |
-| values      | string [] | values to compare against                   | Yes                                             |
+| field             | type                 | description                                                  | required? (Yes/Optional/Conditionally Required) |
+|-------------------|----------------------|--------------------------------------------------------------|-------------------------------------------------|
+| searchCriteria    | SearchCriteria []    | List of `SearchCriteria`. Must follow Search Criteria schema | Yes                                             |
+
+> **Parameter Guide**
+> 
+> - Use `text` for generic search. The endpoint will perform a weighted *full-text search* against recipe `title`, `description`, and `instruction` in that particular order.
+> - Use `servings` to filter based on the number of servings the recipe yields.
+> - Use `ingredients` to filter based on ingredient name.
+> - Use `diet_types` to filter based on diet type name.
+
+
 
 **Sample Request**
 
@@ -235,7 +260,7 @@ that provides the creation, retrieval, search, deletion, and update of a cooking
       {
          "parameter": "text",
          "operation": "EQUALS",
-         "values": "Adobo"
+         "values": ["Pork", "meat"]
       }
    ]
 }
@@ -246,9 +271,50 @@ that provides the creation, retrieval, search, deletion, and update of a cooking
 `200 OK`
 
 ```json
-TODO
+[
+   {
+      "id": "6e753255-0ee9-4147-a531-ea99049d6358",
+      "title": "Pork Adobo",
+      "description": "Filipino Staple Food",
+      "servings": 4,
+      "instructions": "1. Mix all ingredients together\\n2. Cook until meat is brown\\n3. Add water, cook for 45 minutes\\n4. Serve",
+      "ingredients": [
+         {
+            "id": "a2e3a1b5-9a52-449c-a003-cf4b95968cbc",
+            "name": "Pork",
+            "description": null,
+            "createdDate": "2026-03-07T21:25:43.305307Z",
+            "updatedDate": null
+         }
+      ],
+      "dietTypes": []
+   }
+]
 ```
 ---
+### API Schema
+#### Ingredient Schema
+
+| field       | type      | description                                                                             |
+|-------------|-----------|-----------------------------------------------------------------------------------------|
+| name        | string    | Name for the ingredient                                                                 |
+| description | string    | Description for additional information about the ingredient                             |
+
+#### Diet Type Schema
+
+| field       | type      | description                                                   |
+|-------------|-----------|---------------------------------------------------------------|
+| name        | string    | Name for the diet type                                        |
+| description | string    | Description for additional information about the diet type    |
+
+#### Search Criteria Schema
+
+| field       | type      | description                                                                                  |
+|-------------|-----------|----------------------------------------------------------------------------------------------|
+| parameter   | string    | property to search/filter (accepted values: `text`, `servings`, `ingredients`, `diet_types`) |
+| operation   | string    | comparator (accepted values: `EQUALS`, `IN`)                                                 |
+| values      | string [] | values to compare against (if checking against one value, pass a list with one element)      |
+
 ---
 ## Database Specs
 ![./docs/diagrams/db_relationship_diagram.png](/docs/diagrams/db_relationship_diagram.png)
@@ -274,6 +340,8 @@ TODO
 ### Future implementations
 1. Add `tags` for recipes making it easier for users to find and filter recipes
     - Examples: User's can a tag a recipe as: `#protein`, `#calorie_deficit`, `#carbo_loading`
+2. Optimize the full-text search by adding *indices (or indexes)* to the search vector
+3. Optimize the conjunction tables b adding *indices (or indexes)* to the respective foreign keys
 
 
 
